@@ -1,0 +1,110 @@
+package usecase
+
+import (
+	"errors"
+	"time"
+
+	"github.com/google/uuid"
+	"lakoo/backend/internal/domain"
+	"lakoo/backend/internal/dto"
+	"lakoo/backend/internal/repository"
+)
+
+type ProductUsecase interface {
+	CreateProduct(tenantID string, req *dto.ProductRequest) (*domain.Product, error)
+	UpdateProduct(id, tenantID string, req *dto.ProductRequest) (*domain.Product, error)
+	DeleteProduct(id, tenantID string) error
+	GetProducts(tenantID string) ([]domain.Product, error)
+	GetProductByID(id, tenantID string) (*domain.Product, error)
+}
+
+type productUsecase struct {
+	repo repository.ProductRepository
+}
+
+func NewProductUsecase(repo repository.ProductRepository) ProductUsecase {
+	return &productUsecase{repo: repo}
+}
+
+func (u *productUsecase) CreateProduct(tenantID string, req *dto.ProductRequest) (*domain.Product, error) {
+	now := time.Now()
+	isActive := true
+	if req.IsActive != nil {
+		isActive = *req.IsActive
+	}
+
+	product := &domain.Product{
+		ID:           uuid.New().String(),
+		TenantID:     tenantID,
+		SKU:          req.SKU,
+		Barcode:      req.Barcode,
+		ImageURL:     req.ImageURL,
+		Name:         req.Name,
+		CostPrice:    req.CostPrice,
+		SellingPrice: req.SellingPrice,
+		StockQty:     req.StockQty,
+		MinStock:     req.MinStock,
+		Unit:         req.Unit,
+		IsActive:     isActive,
+		CreatedAt:    now,
+		UpdatedAt:    now,
+	}
+
+	err := u.repo.Create(product)
+	if err != nil {
+		return nil, err
+	}
+	return product, nil
+}
+
+func (u *productUsecase) UpdateProduct(id, tenantID string, req *dto.ProductRequest) (*domain.Product, error) {
+	existing, err := u.repo.FindByID(id, tenantID)
+	if err != nil {
+		return nil, err
+	}
+	if existing == nil {
+		return nil, errors.New("product not found")
+	}
+
+	isActive := existing.IsActive
+	if req.IsActive != nil {
+		isActive = *req.IsActive
+	}
+
+	existing.SKU = req.SKU
+	existing.Barcode = req.Barcode
+	existing.ImageURL = req.ImageURL
+	existing.Name = req.Name
+	existing.CostPrice = req.CostPrice
+	existing.SellingPrice = req.SellingPrice
+	existing.StockQty = req.StockQty
+	existing.MinStock = req.MinStock
+	existing.Unit = req.Unit
+	existing.IsActive = isActive
+	existing.UpdatedAt = time.Now()
+
+	err = u.repo.Update(existing)
+	if err != nil {
+		return nil, err
+	}
+	return existing, nil
+}
+
+func (u *productUsecase) DeleteProduct(id, tenantID string) error {
+	return u.repo.Delete(id, tenantID)
+}
+
+func (u *productUsecase) GetProducts(tenantID string) ([]domain.Product, error) {
+	return u.repo.FindByTenant(tenantID)
+}
+
+func (u *productUsecase) GetProductByID(id, tenantID string) (*domain.Product, error) {
+	product, err := u.repo.FindByID(id, tenantID)
+	if err != nil {
+		return nil, err
+	}
+	if product == nil {
+		return nil, errors.New("product not found")
+	}
+	return product, nil
+}
