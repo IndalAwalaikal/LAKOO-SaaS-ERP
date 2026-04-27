@@ -5,6 +5,7 @@ import (
 	"lakoo/backend/internal/dto"
 	"lakoo/backend/internal/usecase"
 	"lakoo/backend/pkg/response"
+	"log"
 )
 
 type ProductHandler struct {
@@ -30,7 +31,8 @@ func (h *ProductHandler) Create(c *gin.Context) {
 
 	res, err := h.usecase.CreateProduct(tenantID.(string), &req)
 	if err != nil {
-		response.Error(c, 422, "UNPROCESSABLE_ENTITY", err.Error())
+		log.Printf("[ProductHandler] Create Error for Tenant %s: %v", tenantID.(string), err)
+		response.Error(c, 422, "DATABASE_ERROR", "Gagal menyimpan produk: "+err.Error())
 		return
 	}
 

@@ -7,6 +7,7 @@ const AI_BASE_URL = import.meta.env.VITE_AI_BASE_URL || 'http://localhost:8000';
 // API Instance for Go Backend Main Services
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -20,17 +21,7 @@ export const aiClient = axios.create({
   },
 });
 
-// Request Interceptor to add JWT Auth Token
-apiClient.interceptors.request.use(
-  (config) => {
-    const token = useAuthStore.getState().token;
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+// Browser handles HttpOnly cookies automatically when withCredentials is true
 
 // Response Interceptor for Universal 401 Logout
 apiClient.interceptors.response.use(

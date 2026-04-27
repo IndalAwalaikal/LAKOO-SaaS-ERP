@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"net/http"
 	"github.com/gin-gonic/gin"
 	"lakoo/backend/internal/dto"
 	"lakoo/backend/internal/usecase"
@@ -44,7 +45,18 @@ func (h *TenantHandler) Login(c *gin.Context) {
 		return
 	}
 
+	// Set Secure HttpOnly Cookie for 24 Hours
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("token", res.Token, 86400, "/", "", false, true)
+
 	response.Success(c, 200, res)
+}
+
+func (h *TenantHandler) Logout(c *gin.Context) {
+	// Clear the Secure Token Cookie
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("token", "", -1, "/", "", false, true)
+	response.Success(c, 200, gin.H{"message": "Successfully logged out from session"})
 }
 
 func (h *TenantHandler) ForgotPassword(c *gin.Context) {

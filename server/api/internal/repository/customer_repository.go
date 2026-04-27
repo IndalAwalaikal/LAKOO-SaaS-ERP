@@ -27,8 +27,8 @@ func NewCustomerRepository(db *sqlx.DB) CustomerRepository {
 
 func (r *customerRepository) Create(c *domain.Customer) error {
 	query := `
-		INSERT INTO customers (id, tenant_id, name, email, phone, address, points, created_at, updated_at)
-		VALUES (:id, :tenant_id, :name, :email, :phone, :address, :points, :created_at, :updated_at)
+		INSERT INTO customers (id, tenant_id, name, email, phone, address, points, is_member, created_at, updated_at)
+		VALUES (:id, :tenant_id, :name, :email, :phone, :address, :points, :is_member, :created_at, :updated_at)
 	`
 	_, err := r.db.NamedExec(query, c)
 	return err
@@ -36,8 +36,8 @@ func (r *customerRepository) Create(c *domain.Customer) error {
 
 func (r *customerRepository) Update(c *domain.Customer) error {
 	query := `
-		UPDATE customers
-		SET name = :name, email = :email, phone = :phone, address = :address, points = :points, updated_at = :updated_at
+		UPDATE customers 
+		SET name = :name, email = :email, phone = :phone, address = :address, points = :points, is_member = :is_member, updated_at = :updated_at
 		WHERE id = :id AND tenant_id = :tenant_id AND deleted_at IS NULL
 	`
 	result, err := r.db.NamedExec(query, c)

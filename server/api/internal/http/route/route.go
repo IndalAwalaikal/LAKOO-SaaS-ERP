@@ -7,6 +7,7 @@ import (
 	
 	"lakoo/backend/internal/http/handler"
 	"lakoo/backend/internal/middleware"
+	"lakoo/backend/internal/repository"
 	"lakoo/backend/pkg/config"
 )
 
@@ -22,12 +23,14 @@ type RouterParams struct {
 	NotificationHandler *handler.NotificationHandler
 	Config              *config.Config
 	RedisClient         *redis.Client
+	TenantRepo          repository.TenantRepository
 }
 
 func RegisterRoutes(p RouterParams) {
 	// Global Middlewares
 	p.Engine.Use(middleware.CORSMiddleware())
 	p.Engine.Use(middleware.SecurityMiddleware())
+	p.Engine.Use(middleware.TenantResolver(p.TenantRepo))
 	
 	v1 := p.Engine.Group("/api/v1")
 	
@@ -42,6 +45,7 @@ func RegisterRoutes(p RouterParams) {
 		auth.POST("/login", middleware.RateLimitMiddleware(p.RedisClient, 5, 15*time.Minute), p.TenantHandler.Login)
 		auth.POST("/forgot-password", p.TenantHandler.ForgotPassword)
 		auth.POST("/reset-password", p.TenantHandler.ResetPassword)
+		auth.POST("/logout", p.TenantHandler.Logout)
 	}
 
 	// Protected Routes

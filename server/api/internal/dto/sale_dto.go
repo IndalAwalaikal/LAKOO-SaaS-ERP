@@ -8,7 +8,7 @@ type SaleItemRequest struct {
 type SaleRequest struct {
 	CustomerID     *string           `json:"customer_id"`
 	DiscountAmount float64           `json:"discount_amount"`
-	PaymentMethod  string            `json:"payment_method" binding:"required,oneof=cash qris transfer"`
+	PaymentMethod  string            `json:"payment_method" binding:"required,oneof=cash qris transfer ewallet"`
 	PaymentStatus  string            `json:"payment_status" binding:"omitempty,oneof=paid pending refunded"`
 	Items          []SaleItemRequest `json:"items" binding:"required,min=1"`
 }

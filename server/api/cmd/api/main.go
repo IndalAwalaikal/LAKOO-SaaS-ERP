@@ -69,6 +69,7 @@ func main() {
 		NotificationHandler: notificationHnd,
 		Config:              cfg,
 		RedisClient:         redisClient,
+		TenantRepo:          tenantRepo,
 	})
 
 	// 8. Start Server

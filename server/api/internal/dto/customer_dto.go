@@ -5,6 +5,7 @@ type CustomerRequest struct {
 	Email   string `json:"email" binding:"omitempty,email"`
 	Phone   string `json:"phone" binding:"omitempty"`
 	Address string `json:"address" binding:"omitempty"`
+	IsMember bool   `json:"is_member"`
 }
 
 type CustomerResponse struct {
@@ -14,4 +15,5 @@ type CustomerResponse struct {
 	Phone   string `json:"phone"`
 	Address string `json:"address"`
 	Points  int    `json:"points"`
+	IsMember bool  `json:"is_member"`
 }

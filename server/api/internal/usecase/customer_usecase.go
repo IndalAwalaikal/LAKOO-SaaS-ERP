@@ -37,6 +37,7 @@ func (u *customerUsecase) CreateCustomer(tenantID string, req *dto.CustomerReque
 		Phone:     req.Phone,
 		Address:   req.Address,
 		Points:    0,
+		IsMember:  req.IsMember,
 		CreatedAt: now,
 		UpdatedAt: now,
 	}
@@ -61,6 +62,7 @@ func (u *customerUsecase) UpdateCustomer(id, tenantID string, req *dto.CustomerR
 	existing.Email = req.Email
 	existing.Phone = req.Phone
 	existing.Address = req.Address
+	existing.IsMember = req.IsMember
 	existing.UpdatedAt = time.Now()
 
 	err = u.repo.Update(existing)

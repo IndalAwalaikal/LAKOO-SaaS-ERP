@@ -9,6 +9,8 @@ import { useThemeStore } from '../store/themeStore'
 import { useNavStore } from '../store/navStore'
 import { formatImageUrl } from '../lib/utils'
 import NotificationBell from './NotificationBell'
+import ToastContainer from './ToastContainer'
+import { apiClient } from '../lib/api'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const { tenant, user, logout } = useAuthStore()
@@ -16,6 +18,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { isCollapsed, toggleCollapsed } = useNavStore()
   const location = useLocation()
   const [isMobileOpen, setIsMobileOpen] = useState(false)
+
+  const handleLogout = async () => {
+    try {
+      await apiClient.post('/auth/logout')
+    } catch (e) {}
+    logout()
+  }
 
   const navItems = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -127,7 +136,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
         <div className={`p-4 border-t border-slate-800 ${isCollapsed ? 'flex justify-center' : ''}`}>
           <button 
-            onClick={logout}
+            onClick={handleLogout}
             title={isCollapsed ? 'Sign Out' : ''}
             className={`flex items-center text-sm font-bold text-slate-300 hover:bg-slate-800 hover:text-red-400 rounded-xl transition-all group ${
               isCollapsed ? 'p-2' : 'w-full px-3 py-2.5'
@@ -169,15 +178,27 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
              <NotificationBell />
 
-             <div className="flex items-center px-3 py-1.5 bg-secondary border border-border rounded-2xl shadow-sm">
-                <div className="h-7 w-7 lg:h-8 lg:w-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center font-black text-xs lg:text-sm shadow-md shadow-primary/20">
-                  {user?.name?.charAt(0).toUpperCase() || 'U'}
-                </div>
-                <div className="hidden sm:flex flex-col ml-3 text-left">
-                  <span className="text-[11px] lg:text-xs font-bold text-foreground leading-none">{user?.name}</span>
-                  <span className="text-[9px] text-muted-foreground leading-none mt-1 uppercase font-black tracking-wider">{user?.role}</span>
-                </div>
-             </div>
+             {user?.role?.toLowerCase() === 'cashier' ? (
+               <div className="flex items-center px-3 py-1.5 bg-secondary border border-border rounded-2xl shadow-sm">
+                  <div className="h-7 w-7 lg:h-8 lg:w-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center font-black text-xs lg:text-sm shadow-md shadow-primary/20">
+                    {user?.name?.charAt(0).toUpperCase() || 'U'}
+                  </div>
+                  <div className="hidden sm:flex flex-col ml-3 text-left">
+                    <span className="text-[11px] lg:text-xs font-bold text-foreground leading-none">{user?.name}</span>
+                    <span className="text-[9px] text-muted-foreground leading-none mt-1 uppercase font-black tracking-wider">{user?.role}</span>
+                  </div>
+               </div>
+             ) : (
+               <Link to="/dashboard/settings" className="flex items-center px-3 py-1.5 bg-secondary border border-border rounded-2xl shadow-sm hover:bg-muted/50 transition-colors group cursor-pointer">
+                  <div className="h-7 w-7 lg:h-8 lg:w-8 rounded-xl bg-primary text-primary-foreground flex items-center justify-center font-black text-xs lg:text-sm shadow-md shadow-primary/20 group-hover:scale-105 transition-transform">
+                    {user?.name?.charAt(0).toUpperCase() || 'U'}
+                  </div>
+                  <div className="hidden sm:flex flex-col ml-3 text-left">
+                    <span className="text-[11px] lg:text-xs font-bold text-foreground leading-none group-hover:text-primary transition-colors">{user?.name}</span>
+                    <span className="text-[9px] text-muted-foreground leading-none mt-1 uppercase font-black tracking-wider">{user?.role}</span>
+                  </div>
+               </Link>
+             )}
           </div>
         </header>
 
@@ -185,6 +206,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           {children}
         </main>
       </div>
+      <ToastContainer />
     </div>
   )
 }

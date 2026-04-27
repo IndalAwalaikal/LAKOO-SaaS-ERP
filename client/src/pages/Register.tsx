@@ -40,7 +40,7 @@ export default function Register() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-background flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="bg-card max-w-md w-full mx-auto p-10 rounded-2xl shadow-xl text-center space-y-6 border border-border">
             <CheckCircle2 className="h-20 w-20 text-emerald-500 mx-auto" />
             <h2 className="text-3xl font-bold text-foreground">Tenant Created!</h2>
@@ -54,7 +54,7 @@ export default function Register() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8 selection:bg-primary selection:text-primary-foreground">
+    <div className="min-h-screen bg-background flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 selection:bg-primary selection:text-primary-foreground">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
         <h2 className="mt-6 text-4xl font-extrabold tracking-tight text-foreground">
           Create Output
@@ -68,7 +68,7 @@ export default function Register() {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-lg">
-        <div className="bg-card py-8 px-4 shadow-xl sm:rounded-2xl sm:px-10 border border-border">
+        <div className="bg-card py-8 px-6 shadow-xl sm:rounded-2xl sm:px-10 border border-border">
           <form className="space-y-5" onSubmit={handleRegister}>
             {error && (
               <div className="bg-red-500/10 text-red-500 p-3 rounded-lg text-sm font-medium border border-red-500/20 animate-in fade-in">
@@ -76,7 +76,7 @@ export default function Register() {
               </div>
             )}
             
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-semibold text-muted-foreground mb-1.5">Store Name</label>
                 <div className="relative">

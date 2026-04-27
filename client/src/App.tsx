@@ -4,8 +4,17 @@ import { useAuthStore } from "./store/auth"
 import { useThemeStore } from "./store/themeStore"
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const token = useAuthStore((state) => state.token)
-  if (!token) return <Navigate to="/login" replace />
+  const user = useAuthStore((state) => state.user)
+  if (!user) return <Navigate to="/login" replace />
+  return <>{children}</>
+}
+
+function RoleRoute({ children, allowedRoles }: { children: React.ReactNode, allowedRoles: string[] }) {
+  const user = useAuthStore((state) => state.user)
+  if (!user) return <Navigate to="/login" replace />
+  if (!allowedRoles.includes(user.role.toLowerCase())) {
+    return <Navigate to="/dashboard" replace />
+  }
   return <>{children}</>
 }
 
@@ -66,9 +75,9 @@ function App() {
         <Route
           path="/dashboard/reports"
           element={
-            <ProtectedRoute>
+            <RoleRoute allowedRoles={['owner', 'manager']}>
               <Reports />
-            </ProtectedRoute>
+            </RoleRoute>
           }
         />
         <Route
@@ -82,17 +91,17 @@ function App() {
         <Route
           path="/dashboard/finance"
           element={
-            <ProtectedRoute>
+            <RoleRoute allowedRoles={['owner', 'manager']}>
               <Finance />
-            </ProtectedRoute>
+            </RoleRoute>
           }
         />
         <Route
           path="/dashboard/settings"
           element={
-            <ProtectedRoute>
+            <RoleRoute allowedRoles={['owner', 'manager']}>
               <Settings />
-            </ProtectedRoute>
+            </RoleRoute>
           }
         />
         <Route path="*" element={<Navigate to="/dashboard" replace />} />

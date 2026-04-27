@@ -7,6 +7,7 @@ export interface Customer {
   email: string;
   phone: string;
   address: string;
+  is_member?: boolean;
   points?: number;
   orders?: number;
   created_at: string;
@@ -38,6 +39,16 @@ export const useDeleteCustomer = () => {
   return useMutation({
     mutationFn: async (id: string) => {
       await apiClient.delete(`/customers/${id}`);
+    },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['customers'] }) }
+  });
+};
+export const useUpdateCustomer = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (customer: Customer) => {
+      const response = await apiClient.put(`/customers/${customer.id}`, customer);
+      return response.data;
     },
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ['customers'] }) }
   });

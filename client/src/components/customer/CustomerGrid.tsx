@@ -1,7 +1,7 @@
-import { Trash, Phone, Mail, MapPin, Users } from 'lucide-react'
+import { Trash, Phone, Mail, MapPin, Users, Pencil } from 'lucide-react'
 import { useDeleteCustomer, type Customer } from '../../hooks/useCustomers'
 
-export default function CustomerGrid({ items }: { items: Customer[] }) {
+export default function CustomerGrid({ items, onEdit }: { items: Customer[], onEdit?: (customer: Customer) => void }) {
   const deleteCustomer = useDeleteCustomer()
   if (items.length === 0) {
     return (
@@ -16,14 +16,25 @@ export default function CustomerGrid({ items }: { items: Customer[] }) {
     <>
       {items.map(customer => (
          <div key={customer.id} className="bg-card border border-border rounded-2xl p-5 shadow-sm hover:shadow-md transition-shadow relative group animate-in fade-in">
-           <button 
-             onClick={() => confirm('Hapus pelanggan kontak ini?') && deleteCustomer.mutateAsync(customer.id)}
-             disabled={deleteCustomer.isPending}
-             className="absolute top-4 right-4 text-muted-foreground hover:text-red-500 p-2 bg-background rounded-md shadow-sm border border-border opacity-0 group-hover:opacity-100 transition-all z-10"
-             title="Hapus"
-           >
-             <Trash className="h-4 w-4" />
-           </button>
+            <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all z-10">
+              {onEdit && (
+                <button 
+                  onClick={() => onEdit(customer)}
+                  className="text-muted-foreground hover:text-primary p-2 bg-background rounded-md shadow-sm border border-border"
+                  title="Edit"
+                >
+                  <Pencil className="h-4 w-4" />
+                </button>
+              )}
+              <button 
+                onClick={() => confirm('Hapus pelanggan kontak ini?') && deleteCustomer.mutateAsync(customer.id)}
+                disabled={deleteCustomer.isPending}
+                className="text-muted-foreground hover:text-red-500 p-2 bg-background rounded-md shadow-sm border border-border"
+                title="Hapus"
+              >
+                <Trash className="h-4 w-4" />
+              </button>
+            </div>
            
            <div className="flex items-start gap-4 mb-4">
              <div className="h-12 w-12 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-lg">
@@ -31,9 +42,11 @@ export default function CustomerGrid({ items }: { items: Customer[] }) {
              </div>
              <div>
                <h3 className="font-bold text-foreground text-lg">{customer.name}</h3>
-               <div className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/30 mt-1">
-                 MEMBER
-               </div>
+               {customer.is_member && (
+                 <div className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/30 mt-1">
+                   MEMBER
+                 </div>
+               )}
              </div>
            </div>
 

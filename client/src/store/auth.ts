@@ -17,10 +17,9 @@ interface Tenant {
 }
 
 interface AuthState {
-  token: string | null
   user: User | null
   tenant: Tenant | null
-  setCreds: (token: string, user: User, tenant: Tenant) => void
+  setCreds: (user: User, tenant: Tenant) => void
   updateUser: (user: Partial<User>) => void
   updateTenant: (tenant: Partial<Tenant>) => void
   logout: () => void
@@ -29,13 +28,12 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
-      token: null,
       user: null,
       tenant: null,
-      setCreds: (token, user, tenant) => set({ token, user, tenant }),
+      setCreds: (user, tenant) => set({ user, tenant }),
       updateUser: (attrs) => set((state) => ({ user: state.user ? { ...state.user, ...attrs } : null })),
       updateTenant: (attrs) => set((state) => ({ tenant: state.tenant ? { ...state.tenant, ...attrs } : null })),
-      logout: () => set({ token: null, user: null, tenant: null }),
+      logout: () => set({ user: null, tenant: null }),
     }),
     {
       name: 'lakoo-auth-storage',

@@ -25,7 +25,7 @@ export default function Login() {
       const res: any = await apiClient.post('/auth/login', { email, password })
       if(res.data?.success || res.status === 200) {
         const payload = res.data.data || res.data
-        setCreds(payload.token, payload.user, payload.tenant)
+        setCreds(payload.user, payload.tenant)
         navigate('/dashboard')
       } else {
         setError(res.error?.message || 'Login failed')
@@ -38,7 +38,7 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col justify-center py-12 sm:px-6 lg:px-8 selection:bg-primary selection:text-primary-foreground">
+    <div className="min-h-screen bg-background flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8 selection:bg-primary selection:text-primary-foreground">
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
         <h2 className="mt-6 text-4xl font-extrabold tracking-tight text-foreground">
           Welcome back
@@ -52,7 +52,7 @@ export default function Login() {
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-card py-8 px-4 shadow-xl sm:rounded-2xl sm:px-10 border border-border">
+        <div className="bg-card py-8 px-6 shadow-xl sm:rounded-2xl sm:px-10 border border-border">
           <form className="space-y-6" onSubmit={handleLogin}>
             {error && (
               <div className="bg-red-500/10 text-red-500 p-3 rounded-lg text-sm font-medium border border-red-500/20 animate-in fade-in slide-in-from-top-2">
