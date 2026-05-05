@@ -219,15 +219,6 @@ docker compose up -d --build
 └── docker-compose.yml           # Multi-container orchestration logic
 ```
 
-## 8. Installation and Infrastructure
-
-### Global Deployment via Docker
-The system is fully containerized and can be initialized with a single command:
-
-```bash
-docker compose up -d --build
-```
-
 ### Infrastructure Verification
 | Service | Access URL | Purpose |
 | :--- | :--- | :--- |
