@@ -111,4 +111,4 @@ Thank you for exploring the Lakoo SaaS Client repository! We built this frontend
 
 If you find this project useful, consider giving it a star! ⭐ Feedback and contributions are always welcome.
 
-*Built with ❤️ by the Lakoo Engineering Team.*
+*Developed with ❤️ by **Indal Awalaikal**.*
