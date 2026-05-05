@@ -54,3 +54,4 @@ server/ai-service/.mypy_cache/
 # Binary & Media Uploads
 server/api/uploads/
 *.log
+server/
