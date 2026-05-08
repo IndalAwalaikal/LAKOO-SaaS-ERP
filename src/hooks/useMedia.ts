@@ -11,11 +11,7 @@ export const useUploadMedia = () => {
       if (options?.remove_bg) params.append('remove_bg', 'true');
       if (options?.folder) params.append('folder', options.folder);
 
-      const response = await apiClient.post(`/media/upload?${params.toString()}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const response = await apiClient.post(`/media/upload?${params.toString()}`, formData);
       return response.data;
     },
   });

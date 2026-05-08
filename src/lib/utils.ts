@@ -10,7 +10,10 @@ export function formatImageUrl(url: string | null | undefined): string | undefin
   
   // If it's a relative path from our new local storage
   if (url.startsWith('/storage/')) {
-    const apiBase = "http://localhost:8080";
+    // Determine the base URL from env or current origin
+    let apiBase = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api/v1';
+    // Remove the /api/v1 part to get the root host
+    apiBase = apiBase.replace('/api/v1', '');
     return `${apiBase}${url}`;
   }
 
