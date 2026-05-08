@@ -64,7 +64,7 @@ export default function Inventory() {
     const file = e.target.files?.[0];
     if (!file) return;
     try {
-      const resp = await uploadMedia.mutateAsync({ file });
+      const resp = await uploadMedia.mutateAsync({ file, options: { folder: 'products' } });
       const url = resp.data?.url || '';
       if (url) {
         if (isEdit && editingProduct) setEditingProduct({ ...editingProduct, image_url: url });

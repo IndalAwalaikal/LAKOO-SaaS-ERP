@@ -13,6 +13,15 @@ export const apiClient = axios.create({
   },
 });
 
+// Inject Authorization header dynamically
+apiClient.interceptors.request.use((config) => {
+  const token = useAuthStore.getState().token;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 // API Instance for Python AI Services
 export const aiClient = axios.create({
   baseURL: AI_BASE_URL,

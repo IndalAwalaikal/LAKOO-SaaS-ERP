@@ -25,7 +25,7 @@ export default function Login() {
       const res: any = await apiClient.post('/auth/login', { email, password })
       if(res.data?.success || res.status === 200) {
         const payload = res.data.data || res.data
-        setCreds(payload.user, payload.tenant)
+        setCreds(payload.user, payload.tenant, payload.token)
         navigate('/dashboard')
       } else {
         setError(res.error?.message || 'Login failed')

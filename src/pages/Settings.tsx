@@ -145,7 +145,7 @@ export default function Settings() {
                         </div>
                         <label className="px-4 py-2 bg-background border border-border rounded-xl text-sm font-medium cursor-pointer shadow-sm">
                            {uploadMedia.isPending ? 'Mengunggah...' : 'Pilih Logo Baru'}
-                           <input type="file" className="hidden" accept="image/*" onChange={async (e) => { if (e.target.files?.[0]) { try { const res = await uploadMedia.mutateAsync({ file: e.target.files[0] }); const url = res.data?.url || res.url || ''; if (url) setLogoUrl(url); } catch (err) { toast.error("Gagal unggah logo") } } }} />
+                           <input type="file" className="hidden" accept="image/*" onChange={async (e) => { if (e.target.files?.[0]) { try { const res = await uploadMedia.mutateAsync({ file: e.target.files[0], options: { folder: 'logos' } }); const url = res.data?.url || res.url || ''; if (url) setLogoUrl(url); } catch (err) { toast.error("Gagal unggah logo") } } }} />
                         </label>
                      </div>
                   </div>
@@ -165,7 +165,7 @@ export default function Settings() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                    <div className="md:col-span-1">
                       <div className="h-48 bg-muted/20 rounded-2xl border-2 border-dashed flex items-center justify-center relative overlow-hidden">
-                         {qrisUrl ? <><img src={formatImageUrl(qrisUrl)} className="w-full h-full object-contain p-2" /><button onClick={() => setQrisUrl('')} className="absolute inset-0 bg-slate-900/60 opacity-0 hover:opacity-100 flex items-center justify-center text-white"><X /></button></> : <label className="cursor-pointer text-primary font-bold text-xs p-4 text-center">Unggah QRIS<input type="file" className="hidden" accept="image/*" onChange={async (e) => { if (e.target.files?.[0]) { try { const res = await uploadMedia.mutateAsync({ file: e.target.files[0] }); const url = res.data?.url || res.url || ''; if (url) setQrisUrl(url) } catch(e) { toast.error("Gagal") } } }} /></label>}
+                         {qrisUrl ? <><img src={formatImageUrl(qrisUrl)} className="w-full h-full object-contain p-2" /><button onClick={() => setQrisUrl('')} className="absolute inset-0 bg-slate-900/60 opacity-0 hover:opacity-100 flex items-center justify-center text-white"><X /></button></> : <label className="cursor-pointer text-primary font-bold text-xs p-4 text-center">Unggah QRIS<input type="file" className="hidden" accept="image/*" onChange={async (e) => { if (e.target.files?.[0]) { try { const res = await uploadMedia.mutateAsync({ file: e.target.files[0], options: { folder: 'qris' } }); const url = res.data?.url || res.url || ''; if (url) setQrisUrl(url) } catch(e) { toast.error("Gagal") } } }} /></label>}
                       </div>
                       <input type="text" placeholder="URL QRIS..." value={qrisUrl} onChange={e => setQrisUrl(e.target.value)} className="w-full mt-3 px-3 py-2 bg-background border border-border rounded-xl text-xs font-mono" />
                    </div>

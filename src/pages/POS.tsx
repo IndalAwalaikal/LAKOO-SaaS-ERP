@@ -172,7 +172,7 @@ export default function POS() {
   if (showReceipt && lastInvoice) {
     return (
         <div className="min-h-screen bg-background flex items-center justify-center p-6 print:p-0">
-          <div className="bg-card p-8 max-w-sm w-full rounded-2xl shadow-xl border print:shadow-none text-foreground">
+          <div className="bg-card p-8 max-w-sm w-full rounded-2xl shadow-xl border print:shadow-none text-foreground print:text-black">
             <div className="text-center mb-6">
               <CheckCircle2 className="h-12 w-12 text-emerald-500 mx-auto mb-3 print:hidden" />
               <h1 className="text-2xl font-bold">{tenant?.name}</h1>
